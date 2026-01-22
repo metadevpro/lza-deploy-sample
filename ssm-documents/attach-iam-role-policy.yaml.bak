@@ -1,0 +1,21 @@
+schemaVersion: '2.2'
+description: 'Attach AWS IAM Managed Policy to IAM Role'
+parameters:
+  RoleName:
+    type: String
+    description: 'IAM Role name'
+  PolicyArn:
+    type: String
+    description: 'AWS Managed Policy ARN'
+mainSteps:
+  - action: 'aws:runShellScript'
+    name: 'attachRolePolicy'
+    inputs:
+      runCommand:
+        - |
+          # Attach AWS Managed Policy to IAM Role
+          aws iam attach-role-policy \
+            --role-name {{ RoleName }} \
+            --policy-arn {{ PolicyArn }}
+          
+          echo "Policy {{ PolicyArn }} attached to role {{ RoleName }}"

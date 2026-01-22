@@ -1,0 +1,512 @@
+homeRegion: &HOME_REGION eu-south-2
+#####################################
+# Delete default VPCs-- use this    #
+# object to delete default VPCs in  #
+# any non-excluded accounts         #
+#####################################
+defaultVpc:
+  delete: true
+  excludeAccounts: []
+
+#####################################
+# Transit Gateways-- use this object #
+# to deploy transit gateways         #
+#####################################
+transitGateways:
+  - name: Network-Main
+    account: Network
+    region: *HOME_REGION
+    shareTargets:
+      organizationalUnits:
+        - Security
+        - Infrastructure
+        - Workloads
+    asn: 65521
+    dnsSupport: enable
+    vpnEcmpSupport: enable
+    defaultRouteTableAssociation: disable
+    defaultRouteTablePropagation: disable
+    autoAcceptSharingAttachments: enable
+    routeTables:
+      - name: Network-Main-Core
+        routes: []
+      - name: Network-Main-Segregated
+        routes: []
+      - name: Network-Main-Shared
+        routes: []
+      - name: Network-Main-Standalone
+        routes: []
+
+#####################################
+# Central network services -- use   #
+# this object to define a delegated  #
+# admin account and configure        #
+# advanced networking services      #
+#####################################
+centralNetworkServices:
+  delegatedAdminAccount: Network
+
+#####################################
+# Endpoint policies -- use this     #
+# object to define standard policies #
+# for VPC endpoints                 #
+#####################################
+endpointPolicies:
+  - name: Default
+    document: vpc-endpoint-policies/default.json
+  - name: Ec2
+    document: vpc-endpoint-policies/ec2.json
+
+#####################################
+# VPCs-- use this object to deploy  #
+# a VPC in a single account and     #
+# region.                           #
+#####################################
+vpcs:
+  - name: vpc-shared-services
+    account: SharedServices
+    region: eu-south-2
+    cidrs:
+      - 10.202.0.0/16
+    internetGateway: true
+    enableDnsHostnames: true
+    enableDnsSupport: true
+    instanceTenancy: default
+    routeTables:
+      - name: sharedservices-public-a
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.202.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+          - name: InternetRoute
+            type: internetGateway
+            destination: 0.0.0.0/0
+      - name: sharedservices-public-b
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.202.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+          - name: InternetRoute
+            type: internetGateway
+            destination: 0.0.0.0/0
+      - name: sharedservices-public-c
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.202.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+          - name: InternetRoute
+            type: internetGateway
+            destination: 0.0.0.0/0
+      - name: sharedservices-private-a
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.202.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+          - name: InternetRoute
+            type: natGateway
+            destination: 0.0.0.0/0
+            target: sharedservices-nat-gw-a
+      - name: sharedservices-private-b
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.202.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+          - name: InternetRoute
+            type: natGateway
+            destination: 0.0.0.0/0
+            target: sharedservices-nat-gw-b
+      - name: sharedservices-private-c
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.202.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+          - name: InternetRoute
+            type: natGateway
+            destination: 0.0.0.0/0
+            target: sharedservices-nat-gw-c
+      - name: sharedservices-tgw-a
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.202.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+      - name: sharedservices-tgw-b
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.202.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+      - name: sharedservices-tgw-c
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.202.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+    subnets:
+      - name: sharedservices-public-a
+        availabilityZone: a
+        routeTable: sharedservices-public-a
+        ipv4CidrBlock: 10.202.0.0/20
+      - name: sharedservices-public-b
+        availabilityZone: b
+        routeTable: sharedservices-public-b
+        ipv4CidrBlock: 10.202.0.16/20
+      - name: sharedservices-public-c
+        availabilityZone: c
+        routeTable: sharedservices-public-c
+        ipv4CidrBlock: 10.202.0.32/20
+      - name: sharedservices-private-a
+        availabilityZone: a
+        routeTable: sharedservices-private-a
+        ipv4CidrBlock: 10.202.0.48/20
+      - name: sharedservices-private-b
+        availabilityZone: b
+        routeTable: sharedservices-private-b
+        ipv4CidrBlock: 10.202.0.64/20
+      - name: sharedservices-private-c
+        availabilityZone: c
+        routeTable: sharedservices-private-c
+        ipv4CidrBlock: 10.202.0.80/20
+      - name: sharedservices-tgw-a
+        availabilityZone: a
+        routeTable: sharedservices-tgw-a
+        ipv4CidrBlock: 10.202.0.96/28
+      - name: sharedservices-tgw-b
+        availabilityZone: b
+        routeTable: sharedservices-tgw-b
+        ipv4CidrBlock: 10.202.0.112/28
+      - name: sharedservices-tgw-c
+        availabilityZone: c
+        routeTable: sharedservices-tgw-c
+        ipv4CidrBlock: 10.202.0.128/28
+    natGateways:
+      - name: sharedservices-nat-gw-a
+        subnet: sharedservices-public-a
+      - name: sharedservices-nat-gw-b
+        subnet: sharedservices-public-b
+      - name: sharedservices-nat-gw-c
+        subnet: sharedservices-public-c
+    transitGatewayAttachments:
+      - name: sharedservices
+        subnets:
+          - sharedservices-tgw-a
+          - sharedservices-tgw-b
+          - sharedservices-tgw-c
+        routeTableAssociations:
+          - Network-Main-Shared
+        routeTablePropagations:
+          - Network-Main-Core
+          - Network-Main-Shared
+          - Network-Main-Standalone
+        transitGateway:
+          account: Network
+          name: Network-Main
+        gatewayEndpoints:
+          defaultPolicy: Default
+          endpoints:
+            - service: s3
+  - name: vpc-dev
+    account: Dev
+    region: eu-south-2
+    cidrs:
+      - 10.205.0.0/16
+    internetGateway: true
+    enableDnsHostnames: true
+    enableDnsSupport: true
+    instanceTenancy: default
+    routeTables:
+      - name: dev-public-a
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.205.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+          - name: InternetRoute
+            type: internetGateway
+            destination: 0.0.0.0/0
+      - name: dev-public-b
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.205.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+          - name: InternetRoute
+            type: internetGateway
+            destination: 0.0.0.0/0
+      - name: dev-public-c
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.205.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+          - name: InternetRoute
+            type: internetGateway
+            destination: 0.0.0.0/0
+      - name: dev-private-a
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.205.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+          - name: InternetRoute
+            type: natGateway
+            destination: 0.0.0.0/0
+            target: dev-nat-gw-a
+      - name: dev-private-b
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.205.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+          - name: InternetRoute
+            type: natGateway
+            destination: 0.0.0.0/0
+            target: dev-nat-gw-b
+      - name: dev-private-c
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.205.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+          - name: InternetRoute
+            type: natGateway
+            destination: 0.0.0.0/0
+            target: dev-nat-gw-c
+      - name: dev-tgw-a
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.205.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+      - name: dev-tgw-b
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.205.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+      - name: dev-tgw-c
+        routes:
+          - name: LocalRoute
+            type: local
+            destination: 10.205.0.0/16
+          - name: TGWRoute
+            type: transitGateway
+            destination: 10.192.0.0/10
+            target: Network-Main
+          - name: EndpointsRoute
+            type: gatewayEndpoint
+            target: s3
+    subnets:
+      - name: dev-public-a
+        availabilityZone: a
+        routeTable: dev-public-a
+        ipv4CidrBlock: 10.205.0.0/20
+      - name: dev-public-b
+        availabilityZone: b
+        routeTable: dev-public-b
+        ipv4CidrBlock: 10.205.0.16/20
+      - name: dev-public-c
+        availabilityZone: c
+        routeTable: dev-public-c
+        ipv4CidrBlock: 10.205.0.32/20
+      - name: dev-private-a
+        availabilityZone: a
+        routeTable: dev-private-a
+        ipv4CidrBlock: 10.205.0.48/20
+      - name: dev-private-b
+        availabilityZone: b
+        routeTable: dev-private-b
+        ipv4CidrBlock: 10.205.0.64/20
+      - name: dev-private-c
+        availabilityZone: c
+        routeTable: dev-private-c
+        ipv4CidrBlock: 10.205.0.80/20
+      - name: dev-tgw-a
+        availabilityZone: a
+        routeTable: dev-tgw-a
+        ipv4CidrBlock: 10.205.0.96/28
+      - name: dev-tgw-b
+        availabilityZone: b
+        routeTable: dev-tgw-b
+        ipv4CidrBlock: 10.205.0.112/28
+      - name: dev-tgw-c
+        availabilityZone: c
+        routeTable: dev-tgw-c
+        ipv4CidrBlock: 10.205.0.128/28
+    natGateways:
+      - name: dev-nat-gw-a
+        subnet: dev-public-a
+      - name: dev-nat-gw-b
+        subnet: dev-public-b
+      - name: dev-nat-gw-c
+        subnet: dev-public-c
+    transitGatewayAttachments:
+      - name: dev
+        subnets:
+          - dev-tgw-a
+          - dev-tgw-b
+          - dev-tgw-c
+        routeTableAssociations:
+          - Network-Main-Shared
+        routeTablePropagations:
+          - Network-Main-Core
+          - Network-Main-Shared
+          - Network-Main-Standalone
+        transitGateway:
+          account: Network
+          name: Network-Main
+        gatewayEndpoints:
+          defaultPolicy: Default
+          endpoints:
+            - service: s3
+
+##############################################################
+# Global configuration for VPC flow logs                     #
+# Where there is no flow log configuration defined with VPC  #
+# this configuration will be used for flow log configuration #
+##############################################################
+vpcFlowLogs:
+  trafficType: ALL
+  maxAggregationInterval: 600
+  destinations:
+    - cloud-watch-logs
+  destinationsConfig:
+    cloudWatchLogs:
+      retentionInDays: 30
+  defaultFormat: false
+  customFields:
+    - version
+    - account-id
+    - interface-id
+    - srcaddr
+    - dstaddr
+    - srcport
+    - dstport
+    - protocol
+    - packets
+    - bytes
+    - start
+    - end
+    - action
+    - log-status
+    - vpc-id
+    - subnet-id
+    - instance-id
+    - tcp-flags
+    - type
+    - pkt-srcaddr
+    - pkt-dstaddr
+    - region
+    - az-id
+    - pkt-src-aws-service
+    - pkt-dst-aws-service
+    - flow-direction
+    - traffic-path

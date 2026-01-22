@@ -1,0 +1,19 @@
+schemaVersion: '2.2'
+description: 'Enforce IMDSv2 on EC2 instances for enhanced security'
+parameters:
+  InstanceId:
+    type: String
+    description: 'EC2 Instance ID'
+mainSteps:
+  - action: 'aws:runShellScript'
+    name: 'enforceIMDSv2'
+    inputs:
+      runCommand:
+        - |
+          # Enforce IMDSv2 on EC2 instance
+          aws ec2 modify-instance-metadata-options \
+            --instance-id {{ InstanceId }} \
+            --http-tokens required \
+            --http-put-response-hop-limit 1
+          
+          echo "IMDSv2 enforced on instance {{ InstanceId }}"

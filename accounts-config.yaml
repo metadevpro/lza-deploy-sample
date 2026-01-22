@@ -1,0 +1,39 @@
+# Real Configuration for Accounts
+mandatoryAccounts:
+  - name: Management
+    description: >-
+      Account for networking
+    email: generic@email.com
+    organizationalUnit: Root
+    warm: false
+  - name: Audit
+    description: >-
+      Account for Audit
+    email: audit@email.com
+    organizationalUnit: Security
+    warm: false
+  - name: LogArchive
+    description: >-
+      Account for Logs
+    email: log-archive@email.com
+    organizationalUnit: Security
+    warm: false
+workloadAccounts:
+  - name: Network
+    description: >-
+      Account for networking
+    email: networks@email.com
+    organizationalUnit: Infrastructure
+    warm: false
+  - name: SharedServices
+    description: >-
+      Account for Shared Services
+    email: shared-services@email.com
+    organizationalUnit: Infrastructure
+    warm: false
+  - name: Dev
+    description: >-
+      Account for Development
+    email: dev@email.com
+    organizationalUnit: Workloads
+    warm: false
