@@ -1,0 +1,21 @@
+schemaVersion: '2.2'
+description: 'Enable access logs on a specified ELB'
+parameters:
+  LoadBalancerName:
+    type: String
+    description: 'Name of the ELB to enable logging for'
+  S3BucketName:
+    type: String
+    description: 'S3 bucket name for storing access logs'
+mainSteps:
+  - action: 'aws:runShellScript'
+    name: 'enableELBLogging'
+    inputs:
+      runCommand:
+        - |
+          # Enable ELB access logging
+          aws elb modify-load-balancer-attributes \
+            --load-balancer-name {{ LoadBalancerName }} \
+            --load-balancer-attributes "{\"AccessLog\":{\"Enabled\":true,\"S3BucketName\":\"{{ S3BucketName }}\"}}"
+
+          echo "ELB access logging enabled for {{ LoadBalancerName }}"

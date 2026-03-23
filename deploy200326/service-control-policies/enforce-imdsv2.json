@@ -1,0 +1,33 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "ec2:RunInstances"
+      ],
+      "Resource": [
+        "arn:aws:ec2:*:*:instance/*"
+      ],
+      "Effect": "Deny",
+      "Condition": {
+        "StringNotEquals": {
+          "ec2:MetadataHttpTokens": "required"
+        }
+      }
+    },
+    {
+      "Action": "ec2:ModifyInstanceMetadataOptions",
+      "Resource": "*",
+      "Effect": "Deny",
+      "Condition": {
+        "ArnNotLike": {
+          "aws:PrincipalARN": [
+            "arn:${PARTITION}:iam::*:role/${ACCELERATOR_PREFIX}-*",
+            "arn:${PARTITION}:iam::*:role/${MANAGEMENT_ACCOUNT_ACCESS_ROLE}",
+            "arn:${PARTITION}:iam::*:role/cdk-accel-*"
+          ]
+        }
+      }
+    }
+  ]
+}
