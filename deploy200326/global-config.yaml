@@ -14,25 +14,17 @@ terminationProtection: true
 snsTopics: # SecurityHub notifications
   deploymentTargets:
     organizationalUnits:
-      - Workloads
-      - Infrastructure
-      - Security
+      - Root
 
   topics:
     - name: Security
       emailAddresses:
-        - pjmolina+networks@metadev.pro
-        - pjmolina+shared-services@metadev.pro
         - pjmolina+audit@metadev.pro
-        - pjmolina+log-archive@metadev.pro
-        - pjmolina+dev@metadev.pro
-        - pjmolina+staging@metadev.pro
-        - pjmolina+production@metadev.pro
 
 controlTower:
   enable: true
   landingZone:
-    version: "3.3"
+    version: "4.0"
     logging:
       loggingBucketRetentionDays: 365
       accessLoggingBucketRetentionDays: 3650
@@ -81,9 +73,6 @@ backup:
     - name: BackupVault
       deploymentTargets:
         organizationalUnits:
-          - Workloads
-          - Infrastructure
-          - Security
-
+          - Root
 tags: []
 iamRoleSsmParameters: []
