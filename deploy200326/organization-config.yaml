@@ -9,4 +9,47 @@ organizationalUnits:
 quarantineNewAccounts:
   enable: true
   scpPolicyName: Quarantine
-
+serviceControlPolicies: 
+  - name: Quarantine
+    description: >
+      This SCP is used to prevent changes to new accounts until the Accelerator
+      has been executed successfully.
+      This policy will be applied upon account creation if enabled.
+    policy: service-control-policies/quarantine.json
+    type: customerManaged
+    deploymentTargets:
+      organizationalUnits: []
+  - name: ENSCompliantServicesAndRegions
+    description: >
+      This SCP is used to enforce the use of ENS compliant services and regions.
+    policy: service-control-policies/ens-compliant.json
+    type: customerManaged
+    deploymentTargets:
+      organizationalUnits:
+       - Infrastructure
+       - Security
+       - Workloads
+  - name: EnforceIMDSv2
+    description: >
+      This SCP is used to enforce IMDSv2.
+    policy: service-control-policies/enforce-imdsv2.json
+    type: customerManaged
+    deploymentTargets:
+      organizationalUnits:
+       - Infrastructure
+       - Security 
+       - Workloads
+taggingPolicies:
+  - name: TagPolicy
+    description: Organization Tagging Policy
+    policy: tagging-policies/org-tag-policy.json
+    deploymentTargets:
+      organizationalUnits:
+        - Root
+backupPolicies:
+  - name: BackupPolicy
+    description: Organization Backup Policy
+    policy: backup-policies/backup-plan.json
+    deploymentTargets:
+      organizationalUnits:
+        - Root
