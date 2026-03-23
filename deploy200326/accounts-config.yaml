@@ -3,7 +3,7 @@ mandatoryAccounts:
   - name: Network
     description: >-
       Account for networking
-    email: pjmolina+networks@metadev.pro
+    email: AwsresellerenduserES5262@ingrammicro.com
     organizationalUnit: Infrastructure
     warm: false
   - name: SharedServices
