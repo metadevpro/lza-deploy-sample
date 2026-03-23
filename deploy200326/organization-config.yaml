@@ -1,0 +1,12 @@
+enable: true
+organizationalUnits:
+  - name: Workloads
+  - name: Workloads/Dev
+  - name: Workloads/Staging
+  - name: Workloads/Production
+  - name: Infrastructure
+  - name: Security
+quarantineNewAccounts:
+  enable: true
+  scpPolicyName: Quarantine
+

@@ -1,0 +1,133 @@
+# Real Configuration for Accounts
+mandatoryAccounts:
+  - name: Network
+    description: >-
+      Account for networking
+    email: pjmolina+networks@metadev.pro
+    organizationalUnit: Infrastructure
+    warm: false
+  - name: SharedServices
+    description: >-
+      Account for Shared Services
+    email: pjmolina+shared-services@metadev.pro
+    organizationalUnit: Infrastructure
+    warm: false
+  - name: Audit
+    description: >-
+      Account for Audit
+    email: pjmolina+audit@metadev.pro
+    organizationalUnit: Security
+    warm: false
+  - name: LogArchive
+    description: >-
+      Account for Logs
+    email: pjmolina+log-archive@metadev.pro
+    organizationalUnit: Security
+    warm: false
+workloadAccounts:
+  - name: Dev
+    description: >-
+      Account for Development
+    email: pjmolina+dev@metadev.pro
+    organizationalUnit: Dev
+    warm: false
+  - name: Staging
+    description: >-
+      Account for Staging
+    email: pjmolina+staging@metadev.pro
+    organizationalUnit: Staging
+    warm: false
+  - name: Production
+    description: >-
+      Account for Production
+    email: pjmolina+production@metadev.pro
+    organizationalUnit: Production
+    warm: false
+
+# Example for reference
+# mandatoryAccounts:
+#   - name: Management
+#     description: >-
+#       Account for Management
+#     email: management@example.com
+#     organizationalUnit: Root
+#     warm: false
+#   - name: Audit
+#     description: >-
+#       Account for Audit
+#     email: audit@example.com
+#     organizationalUnit: Root
+#     warm: false
+#   - name: LogArchive
+#     description: >-
+#       Account for LogArchive
+#     email: logarchive@example.com
+#     organizationalUnit: Root
+#     warm: false
+#   - name: Network
+#     description: >-
+#       Account for Network
+#     email: network@example.com
+#     organizationalUnit: Root
+#     warm: false
+#   - name: Security
+#     description: >-
+#       Account for Security
+#     email: security@example.com
+#     organizationalUnit: Root
+#     warm: false
+#   - name: SharedServices
+#     description: >-
+#       Account for SharedServices
+#     email: sharedservices@example.com
+#     organizationalUnit: Root
+#     warm: false
+#   - name: GitECR
+#     description: >-
+#       Account for GitECR
+#     email: gitecr@example.com
+#     organizationalUnit: Root
+#     warm: false
+#   - name: MonitorReports
+#     description: >-
+#       Account for MonitorReports
+#     email: monitorreports@example.com
+#     organizationalUnit: Root
+#     warm: false
+# workloadAccounts:
+#   - name: Sandbox
+#     description: >-
+#       Account for Sandbox
+#     email: sandbox@example.com
+#     organizationalUnit: Root
+#     warm: false
+#   - name: Development
+#     description: >-
+#       Account for Development
+#     email: development@example.com
+#     organizationalUnit: Root
+#     warm: false
+#   - name: Qa
+#     description: >-
+#       Account for Qa
+#     email: qa@example.com
+#     organizationalUnit: Root
+#     warm: false
+#   - name: Stagging
+#     description: >-
+#       Account for Stagging
+#     email: stagging@example.com
+#     organizationalUnit: Root
+#     warm: false
+#   - name: Demo
+#     description: >-
+#       Account for Demo
+#     email: demo@example.com
+#     organizationalUnit: Root
+#     warm: false
+#   - name: VPNs
+#     description: >-
+#       Account for VPNs
+#     email: vpns@example.com
+#     organizationalUnit: Root
+#     warm: false
