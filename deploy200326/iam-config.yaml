@@ -60,9 +60,6 @@ identityCenter:
         awsManaged:
           - arn:aws:iam::aws:policy/AdministratorAccess
       sessionDuration: 60
-providers:
-  - metadataDocument: GoogleIDPMetadata.xml
-    name: GoogleWorkspaces
 #  identityCenterAssignments:
 #    - name: Assignment1
 #      permissionSetName: PermissionSet1
