@@ -1,0 +1,31 @@
+schemaVersion: '2.2'
+description: 'Enable S3 bucket encryption using KMS'
+parameters:
+  BucketName:
+    type: String
+    description: 'Name of the S3 bucket to encrypt'
+  KMSKeyId:
+    type: String
+    description: 'KMS Key ID for encryption'
+    default: 'aws/s3'
+mainSteps:
+  - action: 'aws:runShellScript'
+    name: 'enableS3Encryption'
+    inputs:
+      runCommand:
+        - |
+          # Enable S3 bucket encryption
+          aws s3api put-bucket-encryption \
+            --bucket {{ BucketName }} \
+            --server-side-encryption-configuration '{
+              "Rules": [
+                {
+                  "ApplyServerSideEncryptionByDefault": {
+                    "SSEAlgorithm": "aws:kms",
+                    "KMSMasterKeyID": "{{ KMSKeyId }}"
+                  }
+                }
+              ]
+            }'
+
+          echo "S3 encryption enabled for bucket {{ BucketName }}"

@@ -1,0 +1,35 @@
+homeRegion: &HOME_REGION eu-south-2
+customizations:
+  cloudFormationStacks:
+    - deploymentTargets:
+        accounts:
+          - Audit
+      description: >-
+        CloudFormation Stack to deploy Prowler for a multi-account environment.
+        https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/create-a-consolidated-report-of-prowler-security-findings-from-multiple-aws-accounts.html
+        Deploys an EC2 Instance (Configured via user data), S3 bucket, IAM Role, and SNS Topic for use with Prowler.
+      name: ProwlerResourcesStack
+      regions:
+        - *HOME_REGION
+      template: cfn-templates/prowler-resources-stack.yaml
+      parameters:
+        - name: ProwlerOptions
+          value: --security-hub
+        - name: EmailAddress
+          value: devops+security@EXAMPLECORP.com # <YOUR_EMAIL_ADDRESS>
+      runOrder: 1
+      terminationProtection: true
+  cloudFormationStackSets:
+    - capabilities: [CAPABILITY_IAM, CAPABILITY_NAMED_IAM]
+      deploymentTargets:
+        organizationalUnits:
+          - Root
+      description: >-
+        CloudFormation StackSet to deploy Prowler Role in all the accounts except Audit.
+      name: IAMProwlerExecRoleStackSet
+      regions:
+        - *HOME_REGION
+      template: cfn-templates/iam-prowler-exec-role-stackset.yaml
+      parameters:
+        - name: ProwlerServiceAccountID
+          value: "{{account Audit}}"

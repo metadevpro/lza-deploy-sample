@@ -1,0 +1,2 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Placeholder template for IAM Prowler exec role stackset
