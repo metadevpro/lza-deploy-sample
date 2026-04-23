@@ -1,0 +1,76 @@
+enable: true
+organizationalUnits:
+  - name: Workloads
+  - name: Workloads/Dev
+  - name: Workloads/Staging
+  - name: Workloads/Production
+  - name: Infrastructure
+  - name: Security
+quarantineNewAccounts:
+  enable: true
+  scpPolicyName: Quarantine
+serviceControlPolicies:
+  - name: ENS Compliant
+    description: >
+      ENS Compliant - Security Scheme
+    policy: service-control-policies/ens-compliant.json
+    type: customerManaged
+    deploymentTargets:
+      organizationalUnits:
+        - Workloads
+        - Infrastructure
+        - Security
+  - name: Enforce IMDSV2
+    description: >
+      Enforce IMDSV2 for EC2 instances
+    policy: service-control-policies/enforce-imdsv2.json
+    type: customerManaged
+    deploymentTargets:
+      organizationalUnits:
+        - Workloads
+        - Infrastructure
+        - Security
+  - name: Guardrails 1
+    description: >
+      Guardrails Policy 1
+    policy: service-control-policies/guardrails-1.json
+    type: customerManaged
+    deploymentTargets:
+      organizationalUnits:
+        - Workloads
+        - Infrastructure
+        - Security
+  - name: Guardrails 2
+    description: >
+      Guardrails Policy 2
+    policy: service-control-policies/guardrails-2.json
+    type: customerManaged
+    deploymentTargets:
+      organizationalUnits:
+        - Workloads
+        - Infrastructure
+        - Security
+  - name: Quarantine
+    description: >
+      Quarantine Policy
+    policy: service-control-policies/quarantine.json
+    type: customerManaged
+    deploymentTargets:
+      organizationalUnits:
+        []
+taggingPolicies:
+  - name: Org Tag Policy
+    description: >
+      Organization Tag Policy
+    policy: tagging-policies/org-tag-policy.json
+    deploymentTargets:
+      organizationalUnits:
+        - Root
+backupPolicies:
+  - name: Backup Plan
+    description: >
+      Backup Plan Policy
+    policy: backup-policies/backup-plan.json
+    deploymentTargets:
+      organizationalUnits:
+        - Root

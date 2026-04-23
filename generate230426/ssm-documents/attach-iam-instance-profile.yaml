@@ -1,0 +1,21 @@
+schemaVersion: '2.2'
+description: 'Attach IAM Instance Profile to EC2 instance'
+parameters:
+  InstanceId:
+    type: String
+    description: 'EC2 Instance ID'
+  IamInstanceProfile:
+    type: String
+    description: 'IAM Instance Profile name'
+mainSteps:
+  - action: 'aws:runShellScript'
+    name: 'attachInstanceProfile'
+    inputs:
+      runCommand:
+        - |
+          # Attach IAM Instance Profile to EC2 instance
+          aws ec2 associate-iam-instance-profile \
+            --instance-id {{ InstanceId }} \
+            --iam-instance-profile Name={{ IamInstanceProfile }}
+
+          echo "IAM Instance Profile {{ IamInstanceProfile }} attached to instance {{ InstanceId }}"
